@@ -38,8 +38,13 @@ data class Hit(
     val story_title: String?,
     val story_url: String?,
     val title: Any?,
-    val url: Any?
+    val url: Any?,
+    var deleted: Boolean = false
 ) {
+    fun markDeleted() {
+        deleted = true
+    }
+
     fun getCreatedTimeToShow(): String {
         try {
             val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")

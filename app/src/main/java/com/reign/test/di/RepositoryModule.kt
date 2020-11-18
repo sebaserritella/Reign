@@ -9,7 +9,7 @@ import org.koin.dsl.module
 
 val repositoryModule = module {
 
-    fun provideCountryRepository(
+    fun provideArticleRepository(
         api: ArticleRemoteDataSource,
         local: ArticleDao,
         context: Context
@@ -17,7 +17,7 @@ val repositoryModule = module {
         return ArticlesRepository(api, local, context)
     }
 
-    single { provideCountryRepository(get(), get(), get()) }
+    single { provideArticleRepository(get(), get(), get()) }
     single { ArticleRemoteDataSource(get()) }
 
 }

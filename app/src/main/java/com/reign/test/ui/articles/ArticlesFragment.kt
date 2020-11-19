@@ -1,10 +1,12 @@
 package com.reign.test.ui.articles
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -15,7 +17,6 @@ import com.reign.test.R
 import com.reign.test.data.models.Hit
 import com.reign.test.databinding.FragmentArticlesBinding
 import kotlinx.android.synthetic.main.fragment_articles.*
-import kotlinx.android.synthetic.main.item_article.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
@@ -50,12 +51,14 @@ class ArticlesFragment : Fragment(), HitClickListener {
         super.onActivityCreated(savedInstanceState)
         setView()
         mViewDataBinding.viewModel = articlesViewModel
-        articlesViewModel.getAllArticles()
+
         articlesViewModel.articlesLiveData.observe(viewLifecycleOwner, Observer {
             if (it != null && it.hits.isNotEmpty()) {
                 hitsAdapter?.setHits(it.hits)
             }
         })
+
+        articlesViewModel.getAllArticles()
     }
 
     private fun setView() {
@@ -73,6 +76,18 @@ class ArticlesFragment : Fragment(), HitClickListener {
             )
 
             addItemDecoration(divider)
+        }
+
+        this.context?.let {
+            ContextCompat.getColor(
+                it, R.color.colorAccent
+            )
+        }?.let { itemsSwipeToRefresh.setProgressBackgroundColorSchemeColor(it) }
+        itemsSwipeToRefresh.setColorSchemeColors(Color.WHITE)
+
+        itemsSwipeToRefresh.setOnRefreshListener {
+            articlesViewModel.getAllArticles()
+            itemsSwipeToRefresh.isRefreshing = false
         }
     }
 

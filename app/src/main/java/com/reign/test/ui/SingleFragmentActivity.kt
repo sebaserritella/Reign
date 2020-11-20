@@ -19,14 +19,14 @@ abstract class SingleFragmentActivity : AppCompatActivity() {
         setContentView(layoutResId)
 
         val fm = supportFragmentManager
-        var fragment = fm.findFragmentById(R.id.fragment_main)
+        var fragment = fm.findFragmentById(R.id.fragment_articles)
 
         // ensures fragments already created will not be created
         if (fragment == null) {
             fragment = createFragment()
             // create and commit a fragment transaction
             fm.beginTransaction()
-                .add(R.id.fragment_main, fragment)
+                .add(R.id.fragment_articles, fragment)
                 .commit()
         }
     }

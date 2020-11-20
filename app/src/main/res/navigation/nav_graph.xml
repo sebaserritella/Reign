@@ -1,11 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/mainFragment">
+    app:startDestination="@id/articlesFragment">
 
     <fragment
-        android:id="@+id/mainFragment"
+        android:id="@+id/articlesFragment"
         android:name="com.reign.test.ui.articles.ArticlesFragment"
-        android:label="MainFragment" />
+        android:label="ArticlesFragment"
+        tools:layout="@layout/fragment_articles">
+        <action
+            android:id="@+id/action_articlesFragment_to_hitFragment"
+            app:destination="@id/hitFragment">
+
+        </action>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/hitFragment"
+        android:name="com.reign.test.ui.hit.HitFragment"
+        android:label="HitFragment"
+        tools:layout="@layout/fragment_hit">
+        <argument
+            android:name="url"
+            app:argType="string" />
+    </fragment>
 </navigation>

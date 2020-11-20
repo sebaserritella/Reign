@@ -5,11 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -25,7 +25,9 @@ class ArticlesFragment : Fragment(), HitClickListener {
     private var hitsAdapter: ArticlesAdapter? = null
 
     private val articlesViewModel by viewModel<ArticlesViewModel>()
-    private lateinit var mViewDataBinding: FragmentArticlesBinding
+    private lateinit var binding: FragmentArticlesBinding
+
+    private val url = "https://stackoverflow.com/"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,10 +41,10 @@ class ArticlesFragment : Fragment(), HitClickListener {
         savedInstanceState: Bundle?
     ): View? {
 
-        mViewDataBinding =
+        binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_articles, container, false)
-        val root = mViewDataBinding.root
-        mViewDataBinding.lifecycleOwner = this
+        val root = binding.root
+        binding.lifecycleOwner = this
         return root
     }
 
@@ -50,7 +52,7 @@ class ArticlesFragment : Fragment(), HitClickListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setView()
-        mViewDataBinding.viewModel = articlesViewModel
+        binding.viewModel = articlesViewModel
 
         articlesViewModel.articlesLiveData.observe(viewLifecycleOwner, Observer {
             if (it != null && it.hits.isNotEmpty()) {
@@ -96,6 +98,11 @@ class ArticlesFragment : Fragment(), HitClickListener {
     }
 
     override fun onItemClick(hit: Hit) {
-        Toast.makeText(this.context, "click ", Toast.LENGTH_LONG)
+        hit.story_url?.let {
+            val action = ArticlesFragmentDirections.actionArticlesFragmentToHitFragment(
+                it
+            )
+            findNavController().navigate(action)
+        }
     }
 }

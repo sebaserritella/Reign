@@ -21,6 +21,11 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".ui.SingleFragmentActivity"
+            android:screenOrientation="portrait">
+        </activity>
+
     </application>
 
 

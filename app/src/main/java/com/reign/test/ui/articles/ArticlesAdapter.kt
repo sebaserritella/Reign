@@ -9,7 +9,6 @@ import com.reign.test.R
 import com.reign.test.data.models.Hit
 import com.reign.test.databinding.ItemArticleBinding
 
-
 class ArticlesAdapter(
     val context: Context?,
     val clickListener: HitClickListener
@@ -25,7 +24,6 @@ class ArticlesAdapter(
         return ArticleViewHolder(viewBinding)
     }
 
-
     override fun getItemCount(): Int {
         return hitList.size
     }
@@ -36,7 +34,6 @@ class ArticlesAdapter(
 
     fun setHits(hits: List<Hit>) {
         val sortedHits =
-            //hits.toMutableList().sortedBy { x -> x.created_at }
             hits.toMutableList().filter { x -> !x.deleted }.sortedBy { x -> x.created_at }
 
         this.hitList = sortedHits

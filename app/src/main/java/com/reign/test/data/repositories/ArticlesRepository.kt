@@ -3,6 +3,7 @@ package com.reign.test.data.repositories
 import android.content.Context
 import com.reign.test.data.ArticleDao
 import com.reign.test.data.models.Article
+import com.reign.test.data.models.Hit
 import com.reign.test.network.AppResult
 import com.reign.test.network.handleApiError
 import com.reign.test.network.handleSuccess
@@ -16,6 +17,9 @@ class ArticlesRepository(
     private val localDataSource: ArticleDao,
     private val context: Context,
 ) {
+
+    fun deleteItem(hit: Hit) {
+    }
 
     suspend fun getArticles(): AppResult<Article?> {
         if (isOnline(context)) {

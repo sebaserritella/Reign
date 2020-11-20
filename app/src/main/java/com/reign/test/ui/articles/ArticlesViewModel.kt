@@ -4,6 +4,7 @@ import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.reign.test.data.models.Article
+import com.reign.test.data.models.Hit
 import com.reign.test.data.repositories.ArticlesRepository
 import com.reign.test.network.AppResult
 import com.reign.test.ui.ScopedViewModel
@@ -31,5 +32,8 @@ class ArticlesViewModel(
                 is AppResult.Error -> showError.value = result.exception.message
             }
         }
+    }
+
+    fun deleteItem(hit: Hit){
     }
 }

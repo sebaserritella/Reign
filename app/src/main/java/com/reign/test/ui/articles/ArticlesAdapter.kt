@@ -11,7 +11,8 @@ import com.reign.test.databinding.ItemArticleBinding
 
 class ArticlesAdapter(
     val context: Context?,
-    val clickListener: HitClickListener
+    val clickListener: HitClickListener ,
+    val articlesViewModel: ArticlesViewModel
 ) : RecyclerView.Adapter<ArticlesAdapter.ArticleViewHolder>() {
 
     var hitList: List<Hit> = ArrayList()
@@ -29,7 +30,7 @@ class ArticlesAdapter(
     }
 
     override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
-        holder.onBind(position)
+        holder.onBind(position, articlesViewModel)
     }
 
     fun setHits(hits: List<Hit>) {
@@ -43,10 +44,16 @@ class ArticlesAdapter(
     inner class ArticleViewHolder(private val viewBinding: ItemArticleBinding) :
         RecyclerView.ViewHolder(viewBinding.root) {
 
-        fun onBind(position: Int) {
+        fun onBind(position: Int, articlesViewModel: ArticlesViewModel) {
             val row = hitList[position]
             viewBinding.hit = row
             viewBinding.hitClickInterface = clickListener
+
+            viewBinding.deleteTextView.setOnClickListener {
+                articlesViewModel.deleteItem(row);
+                row.markDeleted()
+                notifyItemChanged(position)
+            }
         }
     }
 

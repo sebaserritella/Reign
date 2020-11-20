@@ -55,7 +55,7 @@ class ArticlesFragment : Fragment(), HitClickListener {
     }
 
     private fun setView() {
-        hitsAdapter = ArticlesAdapter(context, this)
+        hitsAdapter = ArticlesAdapter(context, this, articlesViewModel)
 
         with(articlesRecyclerView) {
             val linearLayoutManager = LinearLayoutManager(context).apply {

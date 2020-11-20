@@ -12,6 +12,6 @@ interface ArticleDao {
     @Query("SELECT * FROM Article")
     fun findAll(): List<Article>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun add(article: List<Article?>)
 }

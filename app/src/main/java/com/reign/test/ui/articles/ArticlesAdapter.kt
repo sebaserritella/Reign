@@ -34,7 +34,7 @@ class ArticlesAdapter(
 
     fun setHits(hits: List<Hit>) {
         val sortedHits =
-            hits.toMutableList().filter { x -> !x.deleted }.sortedBy { x -> x.created_at }
+            hits.toMutableList().filter { x -> !x.deleted }.sortedByDescending { x -> x.created_at }
 
         this.hitList = sortedHits
         notifyDataSetChanged()

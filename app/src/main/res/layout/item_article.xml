@@ -5,8 +5,6 @@
 
     <data>
 
-        <import type="android.view.View" />
-
         <variable
             name="hit"
             type="com.reign.test.data.models.Hit" />
@@ -16,37 +14,35 @@
             type="com.reign.test.ui.articles.HitClickListener" />
     </data>
 
-    <com.chauthai.swipereveallayout.SwipeRevealLayout 
+    <com.chauthai.swipereveallayout.SwipeRevealLayout
         android:id="@+id/swipelayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
+        android:layout_height="100dp"
+        android:layout_margin="1dp"
+        android:background="@color/white"
         app:dragEdge="right"
         app:mode="same_level">
 
-        <!--Swipe Layout-->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="horizontal">
-           
+
             <TextView
                 android:id="@+id/deleteTextView"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:background="@color/red"
                 android:gravity="center"
-                android:text="Delete"
+                android:text="@string/delete"
                 android:textColor="@color/white" />
 
         </LinearLayout>
 
-        <!--Main Layout-->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:onClick="@{() -> hitClickInterface.onItemClick(hit)}"
-            android:background="@color/white"
             android:padding="6dp">
 
             <TextView
@@ -55,10 +51,12 @@
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
                 android:textSize="18sp"
+
                 android:textColor="@color/black"
                 android:text="@{hit.story_title}"
                 tools:text="How to automatically create images for Responsive desing"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/authorTextView" />
 
             <TextView
                 android:id="@+id/authorTextView"

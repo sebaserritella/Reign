@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,13 +26,6 @@ class ArticlesFragment : Fragment(), HitClickListener {
     private val articlesViewModel by viewModel<ArticlesViewModel>()
     private lateinit var binding: FragmentArticlesBinding
 
-    private val url = "https://stackoverflow.com/"
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        retainInstance = true
-    }
-
     // inflate your view here
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,31 +37,31 @@ class ArticlesFragment : Fragment(), HitClickListener {
             DataBindingUtil.inflate(inflater, R.layout.fragment_articles, container, false)
         val root = binding.root
         binding.lifecycleOwner = this
+        binding.viewModel = articlesViewModel
         return root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        setView()
-        binding.viewModel = articlesViewModel
-
-        articlesViewModel.articlesLiveData.observe(viewLifecycleOwner, Observer {
+        articlesViewModel.articlesLiveData.observe(viewLifecycleOwner, {
             if (it != null && it.hits.isNotEmpty()) {
                 hitsAdapter?.setHits(it.hits)
             }
         })
 
+        setView()
         articlesViewModel.getAllArticles()
     }
 
     private fun setView() {
-        val linearLayoutManager = LinearLayoutManager(context).apply {
-            orientation = RecyclerView.VERTICAL
-        }
         hitsAdapter = ArticlesAdapter(context, this)
 
         with(articlesRecyclerView) {
+            val linearLayoutManager = LinearLayoutManager(context).apply {
+                orientation = RecyclerView.VERTICAL
+            }
+
             layoutManager = linearLayoutManager
             adapter = hitsAdapter
             val divider = DividerItemDecoration(

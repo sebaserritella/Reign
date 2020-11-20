@@ -48,11 +48,14 @@ data class Hit(
     fun getCreatedTimeToShow(): String {
         try {
             val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+            format.timeZone = TimeZone.getTimeZone("Etc/UTC")
             val dateApi: Date = format.parse(created_at)
 
             val dateNow = Calendar.getInstance().time
+            val timezone = TimeZone.getDefault()
+            timezone.rawOffset
 
-            val diff: Long = dateApi.time - dateNow.time
+            val diff: Long = dateNow.time - dateApi.time
             val seconds = diff / 1000
             val minutes = seconds / 60
             val hours = minutes / 60

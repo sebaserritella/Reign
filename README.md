@@ -9,16 +9,22 @@ Kotlin
 ### Architecture & Patterns
 
 MVVM (Model View ViewModel)
+
 Bindings
+
 Layered
+
 Livedata
+
 Navigation (Single activity, multiple fragments)
 
 
 ### API & Network
 
 Retrofit 2
+
 okhttp3
+
 Moshi
 
 ### Database (SQLite)
@@ -37,7 +43,9 @@ Kotlin coroutins
 
 #### Native
 RecyclerView (for list articles)
+
 Swiperefreshlayout (for manage pull gesture to refresh)
+
 WebView
 
 #### JitPack

@@ -11,11 +11,11 @@ import com.reign.test.data.models.Hit
 import com.reign.test.databinding.ItemArticleBinding
 
 
-class ArticlesAdapter(
+class HitsAdapter(
     val context: Context?,
     val clickListener: HitClickListener,
-    val articlesViewModel: ArticlesViewModel
-) : RecyclerView.Adapter<ArticlesAdapter.ArticleViewHolder>() {
+    val hitsViewModel: HitsViewModel
+) : RecyclerView.Adapter<HitsAdapter.ArticleViewHolder>() {
 
     var hitList: MutableList<Hit> = ArrayList()
     private val viewBinderHelper = ViewBinderHelper()
@@ -39,7 +39,7 @@ class ArticlesAdapter(
     }
 
     override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
-        holder.onBind(position, articlesViewModel)
+        holder.onBind(position, hitsViewModel)
     }
 
     fun setHits(hits: MutableList<Hit>) {
@@ -55,7 +55,7 @@ class ArticlesAdapter(
 
 
 
-        fun onBind(position: Int, articlesViewModel: ArticlesViewModel) {
+        fun onBind(position: Int, hitsViewModel: HitsViewModel) {
             val row = hitList[position]
             viewBinding.hit = row
             viewBinding.hitClickInterface = clickListener
@@ -64,7 +64,7 @@ class ArticlesAdapter(
             viewBinderHelper.closeLayout(position.toString());
 
             viewBinding.deleteTextView.setOnClickListener {
-                articlesViewModel.deleteItem(position.toString(), row)
+                hitsViewModel.deleteItem(position.toString(), row, hitList)
                 notifyItemChanged(position)
             }
         }

@@ -10,22 +10,21 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.reign.test.R
 import com.reign.test.data.models.Hit
-import com.reign.test.databinding.FragmentArticlesBinding
-import kotlinx.android.synthetic.main.fragment_articles.*
+import com.reign.test.databinding.FragmentHitsBinding
+import kotlinx.android.synthetic.main.fragment_hits.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
-class ArticlesFragment : Fragment(), HitClickListener {
+class HitsFragment : Fragment(), HitClickListener {
 
-    private var hitsAdapter: ArticlesAdapter? = null
+    private var hitsAdapter: HitsAdapter? = null
 
-    private val articlesViewModel by viewModel<ArticlesViewModel>()
-    private lateinit var binding: FragmentArticlesBinding
+    private val articlesViewModel by viewModel<HitsViewModel>()
+    private lateinit var binding: FragmentHitsBinding
 
     // inflate your view here
     override fun onCreateView(
@@ -35,7 +34,7 @@ class ArticlesFragment : Fragment(), HitClickListener {
     ): View? {
 
         binding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_articles, container, false)
+            DataBindingUtil.inflate(inflater, R.layout.fragment_hits, container, false)
         val root = binding.root
         binding.lifecycleOwner = this
         binding.viewModel = articlesViewModel
@@ -54,7 +53,7 @@ class ArticlesFragment : Fragment(), HitClickListener {
     }
 
     private fun setView() {
-        hitsAdapter = ArticlesAdapter(context, this, articlesViewModel)
+        hitsAdapter = HitsAdapter(context, this, articlesViewModel)
 
         with(articlesRecyclerView) {
             val linearLayoutManager = LinearLayoutManager(context).apply {
@@ -85,12 +84,12 @@ class ArticlesFragment : Fragment(), HitClickListener {
     }
 
     companion object {
-        fun newInstance() = ArticlesFragment()
+        fun newInstance() = HitsFragment()
     }
 
     override fun onItemClick(hit: Hit) {
         hit.story_url?.let {
-            val action = ArticlesFragmentDirections.actionArticlesFragmentToHitFragment(
+            val action = HitsFragmentDirections.actionArticlesFragmentToHitFragment(
                 it
             )
             findNavController().navigate(action)

@@ -80,16 +80,19 @@ class ArticleRepository(
         }
     }
 
-    suspend fun updateHit(position: String, hit: Hit) {
+    suspend fun updateHit(position: String, hit: Hit, hitList: MutableList<Hit>) {
         withContext(Dispatchers.IO) {
-            hit.deleted = true
-            val hit2 = hit.toMap()
             val documentReference = getArticlesCollection().document("0")
 
-            val data = hashMapOf("articleId" to true)
+            hitList.find { x -> x == hit }?.markDeleted()
 
-            documentReference
-                .set(data, SetOptions.merge())
+            val docData = hashMapOf(
+                "hits" to hitList
+            )
+
+
+
+            documentReference.set(docData, SetOptions.merge())
 
             // return@withContext documentReference.update("hits", FieldValue.arrayUnion(hit2)).await()
         }
@@ -124,13 +127,13 @@ class ArticleRepository(
 
     private suspend fun getHitsFromDatabase(): MutableList<Hit>? {
         val list = downloadSomething()
-        val deleteds = list?.filter { x -> x.deleted == true }?.toMutableList()
+        val deleteds = list?.filter { x -> x.isDeleted == "true" }?.toMutableList()
 
         if (deleteds?.isNotEmpty() == true) {
             val aux = 5
         }
 
-        return list?.filter { x -> x.deleted == false || x.deleted == null }?.toMutableList()
+        return list?.filter { x -> x.isDeleted == "false" || x.isDeleted == null }?.toMutableList()
     }
 
 

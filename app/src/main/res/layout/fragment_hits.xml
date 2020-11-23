@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="com.reign.test.ui.articles.ArticlesViewModel" />
+            type="com.reign.test.ui.articles.HitsViewModel" />
 
     </data>
 

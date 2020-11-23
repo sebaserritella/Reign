@@ -12,7 +12,7 @@ import com.reign.test.util.SingleLiveEvent
 import kotlinx.coroutines.launch
 
 
-class ArticlesViewModel(
+class HitsViewModel(
     private val articleRepository: ArticleRepository
 ) : ScopedViewModel() {
 
@@ -47,9 +47,9 @@ class ArticlesViewModel(
         }
     }
 
-    fun deleteItem(position: String, hit: Hit) {
+    fun deleteItem(position: String, hit: Hit, hitList: MutableList<Hit>) {
         viewModelScope.launch {
-            val result = articleRepository.updateHit(position, hit)
+            val result = articleRepository.updateHit(position, hit, hitList)
             loadArticles()
         }
     }

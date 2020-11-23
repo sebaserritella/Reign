@@ -3,9 +3,9 @@ package com.reign.test.data.models
 import androidx.annotation.Keep
 import com.google.firebase.database.Exclude
 import com.google.firebase.database.IgnoreExtraProperties
+import com.google.firebase.firestore.PropertyName
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.HashMap
 
 @IgnoreExtraProperties
 data class Article(
@@ -22,14 +22,18 @@ data class Article(
 ) {
 
     @Keep
-    fun Article() {}
+    fun Article() {
+    }
 }
 
 @IgnoreExtraProperties
 data class Hit(
+    @get:PropertyName("highlightResult")
     val _highlightResult: HighlightResult?,
+    @get:PropertyName("tags")
     val _tags: ArrayList<String>?,
     val author: String?,
+    @get:PropertyName("comment_text_hit")
     val comment_text: String?,
     val created_at: String?,
     val created_at_i: Int?,
@@ -38,18 +42,20 @@ data class Hit(
     val story_id: Int?,
     val story_title: String?,
     val story_url: String?,
-    var deleted: Boolean?
+    @field:JvmField
+    var isDeleted: String?
 ) {
     @Keep
-    fun Hit() {}
+    fun Hit() {
+    }
 
     @Exclude
     fun toMap(): HashMap<String, Any?> {
         return hashMapOf(
-            "_highlightResult" to _highlightResult,
-            "_tags" to _tags,
+            "highlightResult" to _highlightResult,
+            "tags" to _tags,
             "author" to author,
-            "comment_text" to comment_text,
+            "comment_text_hit" to comment_text,
             "created_at" to created_at,
             "created_at_i" to created_at_i,
             "objectID" to objectID,
@@ -57,12 +63,12 @@ data class Hit(
             "story_id" to story_id,
             "story_title" to story_title,
             "story_url" to story_url,
-            "deleted" to deleted
+            "deleted" to isDeleted
         )
     }
 
     fun markDeleted() {
-        deleted = true
+        isDeleted = "true"
     }
 
     fun getCreatedTimeToShow(): String {
@@ -107,12 +113,26 @@ data class Hit(
 
 data class HighlightResult(
     val author: Author?,
+    @Exclude
     val comment_text: CommentText?,
     val story_title: StoryTitle?,
     val story_url: StoryUrl?,
     val title: Title?,
     val url: Url?
-)
+) {
+    @Exclude
+    fun toMap(): HashMap<String, Any?> {
+        return hashMapOf(
+            "author" to author,
+            "comment_text" to comment_text,
+            "story_title" to story_title,
+            "story_url" to story_url,
+            "title" to title,
+            "url" to url
+
+        )
+    }
+}
 
 @IgnoreExtraProperties
 data class Author(
@@ -120,7 +140,17 @@ data class Author(
     val matchLevel: String?,
     val matchedWords: List<String?>?,
     val value: String?
-)
+) {
+    @Exclude
+    fun toMap(): HashMap<String, Any?> {
+        return hashMapOf(
+            "fullyHighlighted" to fullyHighlighted,
+            "matchLevel" to matchLevel,
+            "matchedWords" to matchedWords,
+            "value" to value
+        )
+    }
+}
 
 @IgnoreExtraProperties
 data class CommentText(
@@ -128,21 +158,49 @@ data class CommentText(
     val matchLevel: String?,
     val matchedWords: List<String?>?,
     val value: String?
-)
+) {
+    @Exclude
+    fun toMap(): HashMap<String, Any?> {
+        return hashMapOf(
+            "fullyHighlighted" to fullyHighlighted,
+            "matchLevel" to matchLevel,
+            "matchedWords" to matchedWords,
+            "value" to value
+        )
+    }
+}
 
 @IgnoreExtraProperties
 data class StoryTitle(
     val matchLevel: String?,
     val matchedWords: List<Any?>?,
     val value: String?
-)
+) {
+    @Exclude
+    fun toMap(): HashMap<String, Any?> {
+        return hashMapOf(
+            "matchLevel" to matchLevel,
+            "matchedWords" to matchedWords,
+            "value" to value
+        )
+    }
+}
 
 @IgnoreExtraProperties
 data class StoryUrl(
     val matchLevel: String?,
     val matchedWords: List<Any?>?,
     val value: String?
-)
+) {
+    @Exclude
+    fun toMap(): HashMap<String, Any?> {
+        return hashMapOf(
+            "matchLevel" to matchLevel,
+            "matchedWords" to matchedWords,
+            "value" to value
+        )
+    }
+}
 
 @IgnoreExtraProperties
 data class Title(
@@ -150,7 +208,17 @@ data class Title(
     val matchLevel: String?,
     val matchedWords: List<String?>?,
     val value: String?
-)
+) {
+    @Exclude
+    fun toMap(): HashMap<String, Any?> {
+        return hashMapOf(
+            "fullyHighlighted" to fullyHighlighted,
+            "matchLevel" to matchLevel,
+            "matchedWords" to matchedWords,
+            "value" to value
+        )
+    }
+}
 
 @IgnoreExtraProperties
 data class Url(
@@ -158,4 +226,14 @@ data class Url(
     val matchLevel: String?,
     val matchedWords: List<String?>?,
     val value: String?
-)
+) {
+    @Exclude
+    fun toMap(): HashMap<String, Any?> {
+        return hashMapOf(
+            "fullyHighlighted" to fullyHighlighted,
+            "matchLevel" to matchLevel,
+            "matchedWords" to matchedWords,
+            "value" to value
+        )
+    }
+}

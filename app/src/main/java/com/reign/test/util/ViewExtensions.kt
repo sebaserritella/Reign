@@ -59,7 +59,7 @@ fun Context.hasPermission(permission: String) =
 /**
  * Return Main Navigation Controller
  */
-fun Activity.getMainNavController() = findNavController(R.id.articlesFragment)
+fun Activity.getMainNavController() = findNavController(R.id.hitsFragment)
 
 /**
  * Return Main Navigation Controller

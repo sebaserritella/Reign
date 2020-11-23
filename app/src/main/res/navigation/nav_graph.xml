@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/articlesFragment">
+    app:startDestination="@id/hitsFragment">
 
     <fragment
-        android:id="@+id/articlesFragment"
-        android:name="com.reign.test.ui.articles.ArticlesFragment"
-        android:label="ArticlesFragment"
-        tools:layout="@layout/fragment_articles">
+        android:id="@+id/hitsFragment"
+        android:name="com.reign.test.ui.articles.HitsFragment"
+        android:label="HitsFragment"
+        tools:layout="@layout/fragment_hits">
         <action
             android:id="@+id/action_articlesFragment_to_hitFragment"
             app:destination="@id/hitFragment">

@@ -41,7 +41,7 @@ class HitsViewModel(
                     showLoading.set(false)
                 }
 
-                is AppResult.Error -> showLoading.set(false)
+                is AppResult.Error -> showError.postValue(result.message)
             }
 
         }

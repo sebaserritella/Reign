@@ -3,6 +3,7 @@ package com.reign.test.data.repositories
 import android.content.Context
 import android.util.Log
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.SetOptions
 import com.google.gson.Gson
 import com.google.gson.JsonElement
@@ -100,29 +101,43 @@ class ArticleRepository(
     }
 
     private suspend fun downloadSomething(): MutableList<Hit>? {
-        val hits = withContext(Dispatchers.IO) {
-            getArticlesCollection().document("0")
-                .get()
-                .addOnCompleteListener {
-                    val documentSnapshot = it.result
-                    if (documentSnapshot != null && documentSnapshot.exists()) {
+        try {
+            val hits = withContext(Dispatchers.IO) {
+                getArticlesCollection().document("0")
+                    .get()
+                    .addOnSuccessListener {
+                        try {
+                            val documentSnapshot = it
+                            if (documentSnapshot != null && documentSnapshot.exists()) {
 
-                        //Log.d(TAG, documentSnapshot.data.toString())
+                                //Log.d(TAG, documentSnapshot.data.toString())
 
-                        val gson = Gson()
-                        val jsonElement: JsonElement = gson.toJsonTree(documentSnapshot.data)
-                        val article: Article = gson.fromJson(jsonElement, Article::class.java)
+                                val gson = Gson()
+                                val jsonElement: JsonElement =
+                                    gson.toJsonTree(documentSnapshot.data)
+                                val article: Article =
+                                    gson.fromJson(jsonElement, Article::class.java)
 
-                        article.hits
+                                article.hits
+                            }
+                        } catch (e: FirebaseFirestoreException) {
+                            mutableListOf<Hit>()
+                        }
                     }
-                }.await()
+                    .addOnFailureListener {
+                        mutableListOf<Hit>()
+                    }
+                    .await()
+            }
+
+            val gson = Gson()
+            val jsonElement: JsonElement = gson.toJsonTree(hits.data)
+            val article: Article = gson.fromJson(jsonElement, Article::class.java)
+
+            return article.hits
+        } catch (e: FirebaseFirestoreException) {
+            return mutableListOf()
         }
-
-        val gson = Gson()
-        val jsonElement: JsonElement = gson.toJsonTree(hits.data)
-        val article: Article = gson.fromJson(jsonElement, Article::class.java)
-
-        return article.hits
     }
 
     private suspend fun getHitsFromDatabase(): MutableList<Hit>? {

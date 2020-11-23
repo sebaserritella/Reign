@@ -27,9 +27,11 @@ okhttp3
 
 Moshi
 
-### Database (SQLite)
+### Database (SQLite)/ Firebase Firestore  
 
 Room
+
+Firebase Firestore: because the api response is document oriented.
 
 ### Dependency Inyection
 

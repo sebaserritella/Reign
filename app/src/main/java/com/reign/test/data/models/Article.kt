@@ -1,18 +1,17 @@
 package com.reign.test.data.models
 
-import androidx.room.Embedded
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.annotation.Keep
+import com.google.firebase.database.Exclude
+import com.google.firebase.database.IgnoreExtraProperties
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.HashMap
 
-@Entity
+@IgnoreExtraProperties
 data class Article(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    val articleId: String = "0",
     val exhaustiveNbHits: Boolean?,
-    @Embedded
-    val hits: ArrayList<Hit>,
+    val hits: MutableList<Hit>?,
     val hitsPerPage: Int?,
     val nbHits: Int?,
     val nbPages: Int?,
@@ -20,27 +19,48 @@ data class Article(
     val params: String?,
     val processingTimeMS: Int?,
     val query: String?
-)
+) {
 
+    @Keep
+    fun Article() {}
+}
+
+@IgnoreExtraProperties
 data class Hit(
     val _highlightResult: HighlightResult?,
-    val _tags: List<String?>?,
+    val _tags: ArrayList<String>?,
     val author: String?,
     val comment_text: String?,
     val created_at: String?,
     val created_at_i: Int?,
-    val num_comments: Any?,
     val objectID: String?,
     val parent_id: Int?,
-    val points: Any?,
     val story_id: Int?,
-    val story_text: Any?,
     val story_title: String?,
     val story_url: String?,
-    val title: Any?,
-    val url: Any?,
-    var deleted: Boolean = false
+    var deleted: Boolean?
 ) {
+    @Keep
+    fun Hit() {}
+
+    @Exclude
+    fun toMap(): HashMap<String, Any?> {
+        return hashMapOf(
+            "_highlightResult" to _highlightResult,
+            "_tags" to _tags,
+            "author" to author,
+            "comment_text" to comment_text,
+            "created_at" to created_at,
+            "created_at_i" to created_at_i,
+            "objectID" to objectID,
+            "parent_id" to parent_id,
+            "story_id" to story_id,
+            "story_title" to story_title,
+            "story_url" to story_url,
+            "deleted" to deleted
+        )
+    }
+
     fun markDeleted() {
         deleted = true
     }
@@ -84,21 +104,17 @@ data class Hit(
     }
 }
 
+
 data class HighlightResult(
-    @Embedded
     val author: Author?,
-    @Embedded
     val comment_text: CommentText?,
-    @Embedded
     val story_title: StoryTitle?,
-    @Embedded
     val story_url: StoryUrl?,
-    @Embedded
     val title: Title?,
-    @Embedded
     val url: Url?
 )
 
+@IgnoreExtraProperties
 data class Author(
     val fullyHighlighted: Boolean?,
     val matchLevel: String?,
@@ -106,6 +122,7 @@ data class Author(
     val value: String?
 )
 
+@IgnoreExtraProperties
 data class CommentText(
     val fullyHighlighted: Boolean?,
     val matchLevel: String?,
@@ -113,18 +130,21 @@ data class CommentText(
     val value: String?
 )
 
+@IgnoreExtraProperties
 data class StoryTitle(
     val matchLevel: String?,
     val matchedWords: List<Any?>?,
     val value: String?
 )
 
+@IgnoreExtraProperties
 data class StoryUrl(
     val matchLevel: String?,
     val matchedWords: List<Any?>?,
     val value: String?
 )
 
+@IgnoreExtraProperties
 data class Title(
     val fullyHighlighted: Boolean?,
     val matchLevel: String?,
@@ -132,6 +152,7 @@ data class Title(
     val value: String?
 )
 
+@IgnoreExtraProperties
 data class Url(
     val fullyHighlighted: Boolean?,
     val matchLevel: String?,

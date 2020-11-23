@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.reign.test.R
@@ -45,13 +46,11 @@ class ArticlesFragment : Fragment(), HitClickListener {
         super.onViewCreated(view, savedInstanceState)
 
         articlesViewModel.articlesLiveData.observe(viewLifecycleOwner, {
-            if (it != null && it.hits.isNotEmpty()) {
-                hitsAdapter?.setHits(it.hits)
-            }
+            it?.let { it1 -> hitsAdapter?.setHits(it1) }
         })
 
         setView()
-        articlesViewModel.getAllArticles()
+        articlesViewModel.getArticles()
     }
 
     private fun setView() {
@@ -80,7 +79,7 @@ class ArticlesFragment : Fragment(), HitClickListener {
         itemsSwipeToRefresh.setColorSchemeColors(Color.WHITE)
 
         itemsSwipeToRefresh.setOnRefreshListener {
-            articlesViewModel.getAllArticles()
+            articlesViewModel.getArticles()
             itemsSwipeToRefresh.isRefreshing = false
         }
     }

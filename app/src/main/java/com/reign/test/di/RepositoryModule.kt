@@ -1,23 +1,21 @@
 package com.reign.test.di
 
 import android.content.Context
-import com.reign.test.data.ArticleDao
-import com.reign.test.data.repositories.ArticleRemoteDataSource
-import com.reign.test.data.repositories.ArticlesRepository
+import com.reign.test.data.repositories.ArticleRepository
+import com.reign.test.data.repositories.HitsRemoteDataSource
 import org.koin.dsl.module
 
 
 val repositoryModule = module {
 
-    fun provideArticleRepository(
-        api: ArticleRemoteDataSource,
-        local: ArticleDao,
+    fun provideHitRepository(
+        api: HitsRemoteDataSource,
         context: Context
-    ): ArticlesRepository {
-        return ArticlesRepository(api, local, context)
+    ): ArticleRepository {
+        return ArticleRepository(api,  context)
     }
 
-    single { provideArticleRepository(get(), get(), get()) }
-    single { ArticleRemoteDataSource(get()) }
+    single { provideHitRepository(get(), get()) }
+    single { HitsRemoteDataSource(get()) }
 
 }

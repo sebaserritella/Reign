@@ -5,17 +5,26 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.chauthai.swipereveallayout.ViewBinderHelper
 import com.reign.test.R
 import com.reign.test.data.models.Hit
 import com.reign.test.databinding.ItemArticleBinding
 
+
 class ArticlesAdapter(
     val context: Context?,
-    val clickListener: HitClickListener ,
+    val clickListener: HitClickListener,
     val articlesViewModel: ArticlesViewModel
 ) : RecyclerView.Adapter<ArticlesAdapter.ArticleViewHolder>() {
 
-    var hitList: List<Hit> = ArrayList()
+    var hitList: MutableList<Hit> = ArrayList()
+    private val viewBinderHelper = ViewBinderHelper()
+
+    fun closeMenu(position: Int) {
+        hitList.removeAt(position)
+        notifyDataSetChanged()
+    }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
         val viewBinding: ItemArticleBinding = DataBindingUtil.inflate(
@@ -33,9 +42,9 @@ class ArticlesAdapter(
         holder.onBind(position, articlesViewModel)
     }
 
-    fun setHits(hits: List<Hit>) {
+    fun setHits(hits: MutableList<Hit>) {
         val sortedHits =
-            hits.toMutableList().filter { x -> !x.deleted }.sortedByDescending { x -> x.created_at }
+            hits.sortedByDescending { x -> x.created_at }.toMutableList()
 
         this.hitList = sortedHits
         notifyDataSetChanged()
@@ -44,14 +53,18 @@ class ArticlesAdapter(
     inner class ArticleViewHolder(private val viewBinding: ItemArticleBinding) :
         RecyclerView.ViewHolder(viewBinding.root) {
 
+
+
         fun onBind(position: Int, articlesViewModel: ArticlesViewModel) {
             val row = hitList[position]
             viewBinding.hit = row
             viewBinding.hitClickInterface = clickListener
+            viewBinderHelper.setOpenOnlyOne(true);
+            viewBinderHelper.bind(viewBinding.swipelayout, position.toString());
+            viewBinderHelper.closeLayout(position.toString());
 
             viewBinding.deleteTextView.setOnClickListener {
-                articlesViewModel.deleteItem(row);
-                row.markDeleted()
+                articlesViewModel.deleteItem(position.toString(), row)
                 notifyItemChanged(position)
             }
         }

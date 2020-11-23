@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "70464513910",
+    "firebase_url": "https://reign-test.firebaseio.com",
+    "project_id": "reign-test",
+    "storage_bucket": "reign-test.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:70464513910:android:1713c248415248a51e7c57",
+        "android_client_info": {
+          "package_name": "com.reign.test"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "70464513910-4r9h6v19co7enspk8hld83vlk0uomj0n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAklHqSN3yh24Z5rmZicHqtNEZmzPooiGM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "70464513910-4r9h6v19co7enspk8hld83vlk0uomj0n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

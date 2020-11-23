@@ -8,4 +8,4 @@ import org.koin.dsl.module
 val viewModelModule = module {
     viewModel { ArticlesViewModel(get()) }
     viewModel { HitViewModel() }
-}
+}                                                   

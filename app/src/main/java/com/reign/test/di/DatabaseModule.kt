@@ -1,24 +1,27 @@
 package com.reign.test.di
 
-import android.app.Application
-import androidx.room.Room
-import com.reign.test.data.repositories.AppDatabase
-import com.reign.test.data.ArticleDao
-import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module
 
 val databaseModule = module {
 
+    /*
     fun provideDatabase(application: Application): AppDatabase =
         Room.databaseBuilder(application, AppDatabase::class.java, "database")
-            .fallbackToDestructiveMigration()
+            //.fallbackToDestructiveMigration()
             .build()
 
-    fun provideArticlesDao(database: AppDatabase): ArticleDao {
-        return database.articleDao
+
+
+    fun provideHitDao(database: AppDatabase): HitDao {
+        return database.hitDao
     }
 
 
     single { provideDatabase(androidApplication()) }
-    single { provideArticlesDao(get()) }
+    single { provideHitDao(get()) }
+
+     */
+
+
+
 }

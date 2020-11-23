@@ -4,10 +4,10 @@ import com.reign.test.data.models.Article
 import com.reign.test.data.services.ArticlesService
 import retrofit2.Response
 
-class ArticleRemoteDataSource(
+class HitsRemoteDataSource(
     private val characterService: ArticlesService
 ) {
-    suspend fun getArticles(): Response<Article> {
+    suspend fun getArticle(): Response<Article> {
         return characterService.getArticleByDateAsync()
     }
 }

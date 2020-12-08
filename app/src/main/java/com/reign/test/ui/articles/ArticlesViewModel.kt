@@ -1,39 +1,38 @@
 package com.reign.test.ui.articles
 
 import androidx.databinding.ObservableBoolean
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.switchMap
+import com.reign.test.base.LiveCoroutinesViewModel
 import com.reign.test.data.models.Article
 import com.reign.test.data.models.Hit
 import com.reign.test.data.repositories.ArticlesRepository
-import com.reign.test.network.AppResult
-import com.reign.test.ui.ScopedViewModel
 import com.reign.test.util.SingleLiveEvent
-import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class ArticlesViewModel(
     private val repository: ArticlesRepository
-) : ScopedViewModel() {
+) : LiveCoroutinesViewModel() {
 
     val showLoading = ObservableBoolean()
-    val articlesLiveData = MutableLiveData<Article?>()
-    val showError = SingleLiveEvent<String>()
+   //val showError = SingleLiveEvent<String>()
 
-    fun getAllArticles() {
-        showLoading.set(true)
-        viewModelScope.launch {
-            val result = repository.getArticles()
-            showLoading.set(false)
-            when (result) {
-                is AppResult.Success<*> -> {
-                    articlesLiveData.postValue(result.successData as Article?)
+    private var hitFetchingLiveData: MutableLiveData<Boolean> = MutableLiveData(true)
+    val hitListLiveData: LiveData<List<Hit>>
+
+    private val _toastLiveData: MutableLiveData<String> = MutableLiveData()
+    val toastLiveData: LiveData<String> get() = _toastLiveData
+
+    init {
+        Timber.d("injection ArticlesViewModel")
+
+        hitListLiveData = hitFetchingLiveData.switchMap {
+            launchOnViewModelScope {
+                repository.loadArticles(disposables) {
+                    _toastLiveData.postValue(it)
                 }
-
-                is AppResult.Error -> showError.value = result.exception.message
             }
         }
-    }
-
-    fun deleteItem(hit: Hit){
     }
 }

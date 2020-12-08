@@ -1,55 +1,54 @@
 package com.reign.test.data.repositories
 
-import android.content.Context
-import com.reign.test.data.ArticleDao
+import androidx.lifecycle.MutableLiveData
 import com.reign.test.data.models.Article
 import com.reign.test.data.models.Hit
-import com.reign.test.network.AppResult
-import com.reign.test.network.handleApiError
-import com.reign.test.network.handleSuccess
-import com.reign.test.util.NetworkManager.isOnline
-import com.reign.test.util.noNetworkConnectivityError
+import com.reign.test.data.network.ArticleClient
+import com.reign.test.data.persistance.ArticleDao
+import com.skydoves.sandwich.*
+import com.skydoves.sandwich.disposables.CompositeDisposable
+import com.skydoves.whatif.whatIfNotNull
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 class ArticlesRepository(
-    private val remoteDataSource: ArticleRemoteDataSource,
-    private val localDataSource: ArticleDao,
-    private val context: Context,
-) {
-
-    fun deleteItem(hit: Hit) {
+    private val articleClient: ArticleClient,
+    private val articleDataSource: ResponseDataSource<Article>,
+    private val articleDao: ArticleDao
+) : Repository {
+    init {
+        Timber.d("Injection ArticlesRepository")
     }
 
-    suspend fun getArticles(): AppResult<Article?> {
-        if (isOnline(context)) {
-            return try {
-                val response = remoteDataSource.getArticles()
-                if (response.isSuccessful) {
-                    response.body()?.let {
-                        withContext(Dispatchers.IO) { localDataSource.add(listOf(it)) }
+    suspend fun loadArticles(
+        disposable: CompositeDisposable,
+        error: (String) -> Unit
+    ) = withContext(Dispatchers.IO) {
+        val liveData = MutableLiveData<List<Hit>>()
+        val articles = articleDao.getArticlesList()
+        articleClient.fetchArticles(articleDataSource, disposable) { apiResponse ->
+            apiResponse
+                // handle the case when the API request gets a success response.
+                .onSuccess {
+                    data.whatIfNotNull {
+                        liveData.postValue(it.hits)
+                        articleDao.insertArticleList(it)
+
                     }
-                    handleSuccess(response)
-                } else {
-                    handleApiError(response)
                 }
-            } catch (e: Exception) {
-                AppResult.Error(e)
-            }
-        } else {
-            //check in db if the data exists
-            val data = getArticleDataFromCache()
-            return if (data.isNotEmpty()) {
-                AppResult.Success(data.first())
-            } else
-            //no network
-                context.noNetworkConnectivityError()
+                // handle the case when the API request gets an error response.
+                // e.g. internal server error.
+                .onError { error(message()) }
+                // handle the case when the API request gets an exception response.
+                // e.g. network connection error.
+                .onException { error(message()) }
         }
-    }
 
-    private suspend fun getArticleDataFromCache(): List<Article> {
-        return withContext(Dispatchers.IO) {
-            localDataSource.findAll()
+        liveData.apply {
+            if (articles.isNotEmpty()) {
+                postValue(articles[0].hits)
+            }
         }
     }
 }

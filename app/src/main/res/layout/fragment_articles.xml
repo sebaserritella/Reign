@@ -8,8 +8,12 @@
         <import type="android.view.View" />
 
         <variable
-            name="viewModel"
+            name="vm"
             type="com.reign.test.ui.articles.ArticlesViewModel" />
+
+        <variable
+            name="adapter"
+            type="com.reign.test.ui.articles.CustomRecyclerViewAdapter" />
 
     </data>
 
@@ -26,7 +30,10 @@
                 android:id="@+id/articlesRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="@{viewModel.showError == null ? View.VISIBLE : View.GONE}"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:adapterHitList="@{vm.hitListLiveData}"
+                app:adapter="@{adapter}"
+                app:toast="@{vm.toastLiveData}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -36,7 +43,7 @@
             android:id="@+id/progressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="@{viewModel.showLoading ? View.VISIBLE : View.GONE}"
+            android:visibility="@{vm.showLoading ? View.VISIBLE : View.GONE}"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"

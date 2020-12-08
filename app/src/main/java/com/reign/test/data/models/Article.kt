@@ -1,46 +1,50 @@
 package com.reign.test.data.models
 
-import androidx.room.Embedded
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.android.parcel.Parcelize
 import java.text.SimpleDateFormat
 import java.util.*
 
 @Entity
+@Parcelize
 data class Article(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int,
-    val exhaustiveNbHits: Boolean?,
-    @Embedded
-    val hits: ArrayList<Hit>,
-    val hitsPerPage: Int?,
-    val nbHits: Int?,
-    val nbPages: Int?,
-    val page: Int?,
-    val params: String?,
-    val processingTimeMS: Int?,
-    val query: String?
-)
+    @PrimaryKey
+    val id: Long = 0L,
+    val exhaustiveNbHits: Boolean,
+    val hits: List<Hit>,
+    val hitsPerPage: Int,
+    val nbHits: Int,
+    val nbPages: Int,
+    val page: Int,
+    val params: String,
+    val processingTimeMS: Int,
+    val query: String
+) : Parcelable
 
+
+@Parcelize
 data class Hit(
-    val _highlightResult: HighlightResult?,
-    val _tags: List<String?>?,
-    val author: String?,
-    val comment_text: String?,
-    val created_at: String?,
-    val created_at_i: Int?,
-    val num_comments: Any?,
-    val objectID: String?,
-    val parent_id: Int?,
-    val points: Any?,
-    val story_id: Int?,
-    val story_text: Any?,
-    val story_title: String?,
-    val story_url: String?,
-    val title: Any?,
-    val url: Any?,
+    val id: Long,
+    val _highlightResult: HighlightResult,
+    val _tags: List<String>,
+    val author: String,
+    val comment_text: String,
+    val created_at: String,
+    val created_at_i: Int,
+    val num_comments: String,
+    val objectID: String,
+    val parent_id: Int,
+    val points: String,
+    val story_id: Int,
+    val story_text: String,
+    val story_title: String,
+    val story_url: String,
+    val title: String,
+    val url: String,
     var deleted: Boolean = false
-) {
+) : Parcelable {
     fun markDeleted() {
         deleted = true
     }
@@ -84,57 +88,65 @@ data class Hit(
     }
 }
 
+@Parcelize
 data class HighlightResult(
-    @Embedded
-    val author: Author?,
-    @Embedded
-    val comment_text: CommentText?,
-    @Embedded
-    val story_title: StoryTitle?,
-    @Embedded
-    val story_url: StoryUrl?,
-    @Embedded
-    val title: Title?,
-    @Embedded
-    val url: Url?
-)
+    val id: Long,
+    val author: Author,
+    val comment_text: CommentText,
+    val story_title: StoryTitle,
+    val story_url: StoryUrl,
+    val title: Title,
+    val url: Url
+) : Parcelable
 
+@Parcelize
 data class Author(
-    val fullyHighlighted: Boolean?,
-    val matchLevel: String?,
-    val matchedWords: List<String?>?,
-    val value: String?
-)
+    val id: Long,
+    val fullyHighlighted: Boolean,
+    val matchLevel: String,
+    val matchedWords: List<String>,
+    val value: String
+) : Parcelable
 
+@Parcelize
 data class CommentText(
-    val fullyHighlighted: Boolean?,
-    val matchLevel: String?,
-    val matchedWords: List<String?>?,
-    val value: String?
-)
+    val id: Long,
+    val fullyHighlighted: Boolean,
+    val matchLevel: String,
+    val matchedWords: List<String>,
+    val value: String
+) : Parcelable
 
+@Parcelize
 data class StoryTitle(
-    val matchLevel: String?,
-    val matchedWords: List<Any?>?,
-    val value: String?
-)
+    val id: Long,
+    val matchLevel: String,
+    val matchedWords: List<String>,
+    val value: String
+) : Parcelable
 
+@Parcelize
 data class StoryUrl(
-    val matchLevel: String?,
-    val matchedWords: List<Any?>?,
-    val value: String?
-)
+    val id: Long,
+    val matchLevel: String,
+    val matchedWords: List<String>,
+    val value: String
+) : Parcelable
 
+@Parcelize
 data class Title(
-    val fullyHighlighted: Boolean?,
-    val matchLevel: String?,
-    val matchedWords: List<String?>?,
-    val value: String?
-)
+    val id: Long,
+    val fullyHighlighted: Boolean,
+    val matchLevel: String,
+    val matchedWords: List<String>,
+    val value: String
+) : Parcelable
 
+@Parcelize
 data class Url(
-    val fullyHighlighted: Boolean?,
-    val matchLevel: String?,
-    val matchedWords: List<String?>?,
-    val value: String?
-)
+    val id: Long,
+    val fullyHighlighted: Boolean,
+    val matchLevel: String,
+    val matchedWords: List<String>,
+    val value: String
+) : Parcelable

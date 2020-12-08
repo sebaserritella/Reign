@@ -1,45 +1,32 @@
 package com.reign.test.di
 
+import com.reign.test.data.models.Article
+import com.reign.test.data.network.ArticleClient
+import com.reign.test.data.network.ArticlesService
+import com.reign.test.data.network.RequestInterceptor
+import com.skydoves.sandwich.ResponseDataSource
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import org.koin.android.BuildConfig.DEBUG
 import org.koin.dsl.module
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
-
 
 val networkModule = module {
-    val connectTimeout: Long = 40// 20s
-    val readTimeout: Long = 40 // 20s
-
-    fun provideHttpClient(): OkHttpClient {
-        val okHttpClientBuilder = OkHttpClient.Builder()
-            .connectTimeout(connectTimeout, TimeUnit.SECONDS)
-            .readTimeout(readTimeout, TimeUnit.SECONDS)
-        if (DEBUG) {
-            val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BODY
-            }
-            okHttpClientBuilder.addInterceptor(httpLoggingInterceptor)
-        }
-        okHttpClientBuilder.build()
-        return okHttpClientBuilder.build()
-    }
-
-    fun provideRetrofit(client: OkHttpClient, baseUrl: String): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl(baseUrl)
-            .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .client(client)
+    single {
+        OkHttpClient.Builder()
+            .addInterceptor(RequestInterceptor())
             .build()
     }
 
-    single { provideHttpClient() }
     single {
         val baseUrl = "https://hn.algolia.com/api/v1/"
-        provideRetrofit(get(), baseUrl)
+        Retrofit.Builder()
+            .client(get<OkHttpClient>())
+            .baseUrl(baseUrl)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
     }
+
+    single { get<Retrofit>().create(ArticlesService::class.java) }
+    single { ArticleClient(get()) }
+    single { ResponseDataSource<List<Article>>() }
 }

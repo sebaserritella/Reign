@@ -9,6 +9,9 @@ import java.lang.reflect.Type
 
 
 object Converters {
+
+
+
     @TypeConverter
     fun fromArticle(article: Article): String {
         return JSONObject().apply {
@@ -29,7 +32,7 @@ object Converters {
     fun toArticle(article: String): Article {
         val json = JSONObject(article)
         return Article(
-            json.getInt("id"),
+            json.getLong("id"),
             json.getBoolean("exhaustiveNbHits"),
             fromHit("hits"),
             json.getInt("hitsPerPage"),

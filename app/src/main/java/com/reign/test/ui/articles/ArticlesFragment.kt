@@ -2,76 +2,30 @@ package com.reign.test.ui.articles
 
 import android.graphics.Color
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.reign.test.R
+import com.reign.test.base.DatabindingFragment
 import com.reign.test.data.models.Hit
 import com.reign.test.databinding.FragmentArticlesBinding
 import kotlinx.android.synthetic.main.fragment_articles.*
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.android.viewmodel.ext.android.getViewModel
 
 
-class ArticlesFragment : Fragment(), HitClickListener {
+class ArticlesFragment : DatabindingFragment(), HitClickListener {
 
-    private var hitsAdapter: ArticlesAdapter? = null
+    private val binding: FragmentArticlesBinding by binding(R.layout.fragment_articles)
 
-    private val articlesViewModel by viewModel<ArticlesViewModel>()
-    private lateinit var binding: FragmentArticlesBinding
-
-    // inflate your view here
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-
-        binding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_articles, container, false)
-        val root = binding.root
-        binding.lifecycleOwner = this
-        binding.viewModel = articlesViewModel
-        return root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        articlesViewModel.articlesLiveData.observe(viewLifecycleOwner, {
-            if (it != null && it.hits.isNotEmpty()) {
-                hitsAdapter?.setHits(it.hits)
-            }
-        })
-
-        setView()
-        articlesViewModel.getAllArticles()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        binding.apply {
+            lifecycleOwner = this@ArticlesFragment
+            adapter = CustomRecyclerViewAdapter()
+            vm = getViewModel()
+        }
+        super.onCreate(savedInstanceState)
     }
 
     private fun setView() {
-        hitsAdapter = ArticlesAdapter(context, this, articlesViewModel)
-
-        with(articlesRecyclerView) {
-            val linearLayoutManager = LinearLayoutManager(context).apply {
-                orientation = RecyclerView.VERTICAL
-            }
-
-            layoutManager = linearLayoutManager
-            adapter = hitsAdapter
-            val divider = DividerItemDecoration(
-                context,
-                linearLayoutManager.orientation
-            )
-
-            addItemDecoration(divider)
-        }
-
         this.context?.let {
             ContextCompat.getColor(
                 it, R.color.colorAccent
@@ -80,7 +34,6 @@ class ArticlesFragment : Fragment(), HitClickListener {
         itemsSwipeToRefresh.setColorSchemeColors(Color.WHITE)
 
         itemsSwipeToRefresh.setOnRefreshListener {
-            articlesViewModel.getAllArticles()
             itemsSwipeToRefresh.isRefreshing = false
         }
     }

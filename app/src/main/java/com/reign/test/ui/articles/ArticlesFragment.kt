@@ -1,8 +1,6 @@
 package com.reign.test.ui.articles
 
-import android.graphics.Color
 import android.os.Bundle
-import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
 import com.reign.test.R
 import com.reign.test.base.DatabindingFragment
@@ -23,19 +21,14 @@ class ArticlesFragment : DatabindingFragment(), HitClickListener {
             vm = getViewModel()
         }
         super.onCreate(savedInstanceState)
-    }
 
-    private fun setView() {
-        this.context?.let {
-            ContextCompat.getColor(
-                it, R.color.colorAccent
-            )
-        }?.let { itemsSwipeToRefresh.setProgressBackgroundColorSchemeColor(it) }
-        itemsSwipeToRefresh.setColorSchemeColors(Color.WHITE)
-
-        itemsSwipeToRefresh.setOnRefreshListener {
-            itemsSwipeToRefresh.isRefreshing = false
+        binding.itemsSwipeToRefresh.setOnRefreshListener {
+            binding.vm?.forceUpdate()
         }
+
+        binding.vm?.fetching?.observe(this, {
+            binding.itemsSwipeToRefresh.isRefreshing = it
+        })
     }
 
     companion object {

@@ -8,7 +8,7 @@ import com.reign.test.R
 import com.reign.test.data.models.Hit
 import com.reign.test.databinding.ItemArticleBinding
 
-class CustomRecyclerViewAdapter() :
+class CustomRecyclerViewAdapter(private val clickListener: HitClickListener) :
     RecyclerView.Adapter<CustomRecyclerViewAdapter.CustomViewHolder>() {
 
     private val items = mutableListOf<Hit>()
@@ -24,20 +24,20 @@ class CustomRecyclerViewAdapter() :
             LayoutInflater.from(parent.context),
             R.layout.item_article, parent, false
         )
+
         return CustomViewHolder(viewBinding)
     }
 
     override fun getItemCount(): Int = items.size
 
-    fun getHit(index: Int): Hit = items[index]
-
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
-        holder.binding.apply {
+        holder.viewBinding.apply {
             hit = items[position]
+            hitClickInterface = clickListener
             executePendingBindings()
         }
     }
 
-    class CustomViewHolder(val binding: ItemArticleBinding) :
-        RecyclerView.ViewHolder(binding.root)
+    inner class CustomViewHolder(val viewBinding: ItemArticleBinding) :
+        RecyclerView.ViewHolder(viewBinding.root)
 }

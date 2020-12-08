@@ -17,7 +17,7 @@ class ArticlesFragment : DatabindingFragment(), HitClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         binding.apply {
             lifecycleOwner = this@ArticlesFragment
-            adapter = CustomRecyclerViewAdapter()
+            adapter = CustomRecyclerViewAdapter(this@ArticlesFragment)
             vm = getViewModel()
         }
         super.onCreate(savedInstanceState)

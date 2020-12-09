@@ -40,9 +40,9 @@ data class Hit(
     val story_id: Int,
     val story_text: String,
     val story_title: String,
-    val story_url: String,
+    val story_url: String?,
     val title: String,
-    val url: String,
+    val url: String?,
     var deleted: Boolean = false
 ) : Parcelable {
     fun markDeleted() {

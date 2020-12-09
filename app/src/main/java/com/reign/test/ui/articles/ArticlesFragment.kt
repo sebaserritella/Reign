@@ -9,7 +9,6 @@ import com.reign.test.databinding.FragmentArticlesBinding
 import kotlinx.android.synthetic.main.fragment_articles.*
 import org.koin.android.viewmodel.ext.android.getViewModel
 
-
 class ArticlesFragment : DatabindingFragment(), HitClickListener {
 
     private val binding: FragmentArticlesBinding by binding(R.layout.fragment_articles)

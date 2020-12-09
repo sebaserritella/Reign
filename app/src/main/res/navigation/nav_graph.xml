@@ -23,6 +23,8 @@
         android:name="com.reign.test.ui.hit.HitFragment"
         android:label="HitFragment"
         tools:layout="@layout/fragment_hit">
+        <action android:id="@+id/action_hitFragment_to_articlesFragment"
+            app:popUpTo="@id/articlesFragment"/>
         <argument
             android:name="url"
             app:argType="string" />
